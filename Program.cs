@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Send27zip
 {
@@ -43,6 +44,9 @@ namespace Send27zip
             mics.centerText("Process is done.");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             mics.centerText("Elapsed time in Milliseconds: " + elapsedMs);
+
+            // if your did not press a key, application will automatically exit in 5 seconds.
+            Task ApplicationExit = mics.ApplicationExitAsync();
             Console.ReadKey();
             Environment.Exit(0);     
         }
