@@ -1,0 +1,6 @@
+E:\Extra\Developments\Send27zip\Send27zip\bin\Debug\Send27zip.exe.config
+E:\Extra\Developments\Send27zip\Send27zip\bin\Debug\Send27zip.exe
+E:\Extra\Developments\Send27zip\Send27zip\bin\Debug\Send27zip.pdb
+E:\Extra\Developments\Send27zip\Send27zip\obj\Debug\Send27zip.csproj.CoreCompileInputs.cache
+E:\Extra\Developments\Send27zip\Send27zip\obj\Debug\Send27zip.exe
+E:\Extra\Developments\Send27zip\Send27zip\obj\Debug\Send27zip.pdb
