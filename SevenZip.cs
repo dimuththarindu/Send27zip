@@ -11,6 +11,43 @@ namespace Send27zip
         string AllSourceLocation = "";
         string targetLocation = "";
         string argument = "";
+        string passwordEnable = "No";
+
+        string password = "";
+        string archiveFormat = "";
+        string compressionLevel = "";
+
+        public SevenZip()
+        {
+            password = Properties.Settings.Default["Password"].ToString();
+            archiveFormat = Properties.Settings.Default["ArchiveFormat"].ToString();
+            compressionLevel = "-mx=" + Properties.Settings.Default["CompressionLevel"].ToString();
+
+            if (password != string.Empty)
+            {
+                password = "-p" + password + " ";
+                passwordEnable = "Yes";
+            }
+            //else
+            //{
+            //    passwordEnable = "No";
+            //}
+        }
+
+        private string ArgumentSelection()
+        {
+            //argument = "a -t7z \"" + targetLocation + "\" " + AllSourceLocation + " -p1111 -m0=lzma -mx=9 -mfb=273 -ms=on -mmt=on -mhc=on -mhe=on";
+            if (archiveFormat == "zip")
+            {
+                argument = "a -tzip \"" + targetLocation + "\" " + AllSourceLocation + " " + password + compressionLevel + " -mfb=258 -mpass=20";
+            }
+            else
+            {
+                argument = "a -t7z \"" + targetLocation + "\" " + AllSourceLocation + " " + password + compressionLevel + " -m0=lzma -mfb=273 -ms=on -mmt=on -mhc=on -mhe=on";
+            }
+
+            return argument;
+        }
 
         public void Start7zip(string[] locations)
         {            
@@ -18,20 +55,23 @@ namespace Send27zip
             //sourceLocation = @"D:\Testing\7zFM";
 
             AllSourceLocation = "\"" + string.Join("\" \"", locations) + "\"";
-            Console.WriteLine("All selected files & folders" + Environment.NewLine + "- " + string.Join(Environment.NewLine + "- ", locations));
+            Console.WriteLine("All selected files & folders");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("- " + string.Join(Environment.NewLine + "- ", locations));
+            Console.ForegroundColor = ConsoleColor.White;
 
             if (locations.Length > 1)
             {
                 // if multiple files are selected, file name will be same as main directory name
-                targetLocation = Path.GetDirectoryName(sourceLocation) + "\\" + Path.GetFileName(Path.GetDirectoryName(sourceLocation)) + ".7z";
+                targetLocation = Path.GetDirectoryName(sourceLocation) + "\\" + Path.GetFileName(Path.GetDirectoryName(sourceLocation)) + "." + archiveFormat;
             }
             else
             {
                 // if only one file is selected, file name will be same
-                targetLocation = Path.GetDirectoryName(sourceLocation) + "\\" + Path.GetFileNameWithoutExtension(sourceLocation) + ".7z";
+                targetLocation = Path.GetDirectoryName(sourceLocation) + "\\" + Path.GetFileNameWithoutExtension(sourceLocation) + "." + archiveFormat;
             }
 
-            argument = "a -t7z \"" + targetLocation + "\" " + AllSourceLocation + " -p1111 -m0=lzma -mx=9 -mfb=273 -ms=on -mmt=on -mhc=on -mhe=on";
+            //argument = "a -t7z \"" + targetLocation + "\" " + AllSourceLocation + " -p1111 -m0=lzma -mx=9 -mfb=273 -ms=on -mmt=on -mhc=on -mhe=on";
 
             #region Metadata 
             // Testing
@@ -92,10 +132,15 @@ namespace Send27zip
             // cu=[off|on]              off        7-Zip uses UTF-8 for file names that contain non-ASCII symbols.
             #endregion
 
-            Console.WriteLine(Environment.NewLine + "Mode: High Compression" + Environment.NewLine + "Password: 1111");
+            Console.WriteLine(String.Empty);
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("Archive Format: " + archiveFormat);
+            Console.WriteLine("Compression Level: " + Properties.Settings.Default["CompressionLevel"].ToString());
+            Console.WriteLine("Password Enabled: " + passwordEnable);
+            Console.ForegroundColor = ConsoleColor.White;
 
             ProcessStartInfo start = new ProcessStartInfo();
-            start.Arguments = argument;
+            start.Arguments = ArgumentSelection();
             start.FileName = exeLocation;
             start.WindowStyle = ProcessWindowStyle.Normal;
 
